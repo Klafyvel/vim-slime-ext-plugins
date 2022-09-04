@@ -1,0 +1,44 @@
+name: vim-slime CI
+on: [push, pull_request]
+jobs:
+  test:
+    name: Unit tests
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        neovim: [true, false]
+        version: [stable, nightly]
+        exclude:
+          - neovim: true
+            version: nightly
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Checkout vader.vim
+        uses: actions/checkout@v3
+        with:
+          repository: junegunn/vader.vim
+          path: vader.vim
+      - name: Setup vim
+        uses: rhysd/action-setup-vim@v1
+        id: vim
+        with:
+          version: ${{ matrix.version }}
+          neovim: ${{ matrix.neovim }}
+      - name: Run tests
+        run: ${{ steps.vim.outputs.executable }} -u ./test/vimrc -c '+Vader! ./test/*.vader'
+      # Some day if we want fancy code coverage badges, we might use what is below :
+      # - uses: actions/setup-python@v1
+      # - name: Report coverage
+      #   run: |
+      #     # https://github.com/Vimjas/covimerage/issues/95
+      #     pip install 'click<8.0.0'
+      #     pip install covimerage
+      #     covimerage write_coverage profile.txt
+      #     coverage report
+      #     coverage xml
+      # - name: Upload coverage to codecov
+      #   uses: codecov/codecov-action@v1
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+
