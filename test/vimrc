@@ -1,0 +1,9 @@
+filetype off
+set rtp+=vader.vim
+set rtp+=.
+set rtp+=after
+filetype plugin indent on
+syntax enable
+" This is required if we want to generate coverage badges.
+" profile start ./profile.txt
+" profile! file ./*

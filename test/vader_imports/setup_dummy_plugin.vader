@@ -1,0 +1,24 @@
+Before (Setup a dummy plugin):
+  let g:test_last_config_received_by_TestTarget = {}
+  let g:test_last_text_received_by_TestTarget = ""
+  function! TestTarget(config, text)
+    let g:test_last_text_received_by_TestTarget = a:text
+    let g:test_last_config_received_by_TestTarget = a:config
+  endfunction
+
+  let g:test_last_config_received_by_TestConfig = {}
+  function! TestConfig(config)
+    let g:test_last_config_received_by_TestConfig = a:config
+    return "Config from TestPlugin"
+  endfunction
+  
+  if exists("g:slime_target_config")
+    let g:slime_target_config_old = g:slime_target_config
+  endif
+  if exists("g:slime_target_send")
+    let g:slime_target_send_old = g:slime_target_send
+  endif
+
+  let g:slime_target_config = "TestConfig"
+  let g:slime_target_send = "TestTarget"
+

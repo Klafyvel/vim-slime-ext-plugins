@@ -1,0 +1,30 @@
+Include: vader_imports/setup_dummy_plugin.vader
+
+Before (Load some dummy configuration):
+  if exists("g:slime_config")
+    let g:slime_config_old = g:slime_config
+  endif
+  let g:slime_config = "This is dummy config"
+
+Given (Void):
+  
+
+Execute (slime#config):
+  call slime#config()
+
+Expect (The text should remain unchanged):
+  
+
+Then (Check slime#config output):
+  AssertEqual "This is dummy config", g:test_last_config_received_by_TestConfig, "slime#config() did not pass the right configuration."
+  AssertEqual "Config from TestPlugin", b:slime_config, "slime#config() did not register the plugin's configuration."
+
+After (Teardown dummy config):
+  if exists("g:slime_config_old")
+    let g:slime_config = g:slime_config_old
+    unlet g:slime_config_old
+  else
+    unlet g:slime_config
+  endif
+
+Include: vader_imports/teardown_dummy_plugin.vader

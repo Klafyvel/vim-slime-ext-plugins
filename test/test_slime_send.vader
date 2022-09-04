@@ -1,0 +1,16 @@
+Include: vader_imports/setup_dummy_plugin.vader
+
+Given (Some text):
+  Please slime, don't harm me.  
+
+Execute (slime#send):
+  call slime#send("Hello World!")
+
+Expect (The text should remain unchanged):
+  Please slime, don't harm me.  
+
+Then (Check slime#config output):
+  AssertEqual "Config from TestPlugin", g:test_last_config_received_by_TestTarget, "slime#send() did not pass the right configuration."
+  AssertEqual "Hello World!", g:test_last_text_received_by_TestTarget, "slime#send() did not pass the right text."
+
+Include: vader_imports/teardown_dummy_plugin.vader
